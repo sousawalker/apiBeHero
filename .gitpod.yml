@@ -3,3 +3,13 @@ tasks:
     command: npm run start
 image:
   file: .gitpod.Dockerfile
+
+vscode:
+  extensions:
+    - xabikos.JavaScriptSnippets@1.7.2:XXmiw8r7K3Guifex/E73aQ==
+    - EditorConfig.EditorConfig@0.14.4:EjFaoTaOf8wRmwR0LNY51A==
+    - Tyriar.sort-lines@1.9.0:39TPtnzbLWepVuVCVtlO3g==
+    - alexcvzz.vscode-sqlite@0.8.1:PQywmjPo5CPnGuwRSsyeiw==
+    - vscode-icons-team.vscode-icons@10.0.0:9G2nNF/k04qaOhAogmEuMg==
+    - aaronphy.scss-scan@0.1.67:qSzewGION11kt91KC/ZjwQ==
+    - Zignd.html-css-class-completion@1.19.0:b3YWQQIEP1z3u93nyLX0UA==
