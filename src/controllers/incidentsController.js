@@ -18,7 +18,8 @@ module.exports = {
       .select(['incidents.*', 'ongs.name', 'ongs.email', 'ongs.whatsapp', 'ongs.city', 'ongs.state'])
       .where({ ong_id: ong_id })
       .offset((pag - 1) * 5)
-      .limit(5);
+      .limit(5)
+      .orderBy('id', 'desc');
     } else {
       total = await connection('incidents').count('*').first();
 
@@ -26,7 +27,8 @@ module.exports = {
       .join('ongs', 'ongs.id', '=', 'incidents.ong_id')
       .select(['incidents.*', 'ongs.name', 'ongs.email', 'ongs.whatsapp', 'ongs.city', 'ongs.state'])
       .offset((pag - 1) * 5)
-      .limit(5);
+      .limit(5)
+      .orderBy('id', 'desc');
     }
 
     response.header('X-Total-Count', total['count(*)']);
