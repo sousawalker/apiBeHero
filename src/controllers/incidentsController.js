@@ -4,6 +4,8 @@ module.exports = {
   async listIncidents(request, response) {
     const { pag = 1 } = request.query;
 
+    const { search } = request.query;
+
     const { ong_id } = request.params;
 
     let incidents = [];
@@ -13,22 +15,43 @@ module.exports = {
     if (ong_id) {
       total = await connection('incidents').count('*').where({ ong_id: ong_id }).first();
 
-      incidents = await connection('incidents')
-      .join('ongs', 'ongs.id', '=', 'incidents.ong_id')
-      .select(['incidents.*', 'ongs.name', 'ongs.email', 'ongs.whatsapp', 'ongs.city', 'ongs.state'])
-      .where({ ong_id: ong_id })
-      .offset((pag - 1) * 5)
-      .limit(5)
-      .orderBy('id', 'desc');
+      if (search) {
+        incidents = await connection('incidents')
+        .join('ongs', 'ongs.id', '=', 'incidents.ong_id')
+        .select(['incidents.*', 'ongs.name', 'ongs.email', 'ongs.whatsapp', 'ongs.city', 'ongs.state'])
+        .where({ ong_id: ong_id })
+        .andWhere('title', 'like', `%${search}%`)
+        .offset((pag - 1) * 5)
+        .limit(6)
+        .orderBy('id', 'desc');
+      } else {
+        incidents = await connection('incidents')
+        .join('ongs', 'ongs.id', '=', 'incidents.ong_id')
+        .select(['incidents.*', 'ongs.name', 'ongs.email', 'ongs.whatsapp', 'ongs.city', 'ongs.state'])
+        .where({ ong_id: ong_id })
+        .offset((pag - 1) * 5)
+        .limit(6)
+        .orderBy('id', 'desc');
+      }
     } else {
       total = await connection('incidents').count('*').first();
 
-      incidents = await connection('incidents')
-      .join('ongs', 'ongs.id', '=', 'incidents.ong_id')
-      .select(['incidents.*', 'ongs.name', 'ongs.email', 'ongs.whatsapp', 'ongs.city', 'ongs.state'])
-      .offset((pag - 1) * 5)
-      .limit(5)
-      .orderBy('id', 'desc');
+      if (search) {
+        incidents = await connection('incidents')
+        .join('ongs', 'ongs.id', '=', 'incidents.ong_id')
+        .select(['incidents.*', 'ongs.name', 'ongs.email', 'ongs.whatsapp', 'ongs.city', 'ongs.state'])
+        .where('title', 'like', `%${search}%`)
+        .offset((pag - 1) * 5)
+        .limit(6)
+        .orderBy('id', 'desc');
+      } else {
+        incidents = await connection('incidents')
+        .join('ongs', 'ongs.id', '=', 'incidents.ong_id')
+        .select(['incidents.*', 'ongs.name', 'ongs.email', 'ongs.whatsapp', 'ongs.city', 'ongs.state'])
+        .offset((pag - 1) * 5)
+        .limit(6)
+        .orderBy('id', 'desc');
+      }
     }
 
     response.header('X-Total-Count', total['count(*)']);
