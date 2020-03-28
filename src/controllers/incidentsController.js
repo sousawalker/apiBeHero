@@ -21,7 +21,7 @@ module.exports = {
         .select(['incidents.*', 'ongs.name', 'ongs.email', 'ongs.whatsapp', 'ongs.city', 'ongs.state'])
         .where({ ong_id: ong_id })
         .andWhere('title', 'like', `%${search}%`)
-        .offset((pag - 1) * 5)
+        .offset((pag - 1) * 6)
         .limit(6)
         .orderBy('id', 'desc');
       } else {
@@ -29,7 +29,7 @@ module.exports = {
         .join('ongs', 'ongs.id', '=', 'incidents.ong_id')
         .select(['incidents.*', 'ongs.name', 'ongs.email', 'ongs.whatsapp', 'ongs.city', 'ongs.state'])
         .where({ ong_id: ong_id })
-        .offset((pag - 1) * 5)
+        .offset((pag - 1) * 6)
         .limit(6)
         .orderBy('id', 'desc');
       }
@@ -41,14 +41,14 @@ module.exports = {
         .join('ongs', 'ongs.id', '=', 'incidents.ong_id')
         .select(['incidents.*', 'ongs.name', 'ongs.email', 'ongs.whatsapp', 'ongs.city', 'ongs.state'])
         .where('title', 'like', `%${search}%`)
-        .offset((pag - 1) * 5)
+        .offset((pag - 1) * 6)
         .limit(6)
         .orderBy('id', 'desc');
       } else {
         incidents = await connection('incidents')
         .join('ongs', 'ongs.id', '=', 'incidents.ong_id')
         .select(['incidents.*', 'ongs.name', 'ongs.email', 'ongs.whatsapp', 'ongs.city', 'ongs.state'])
-        .offset((pag - 1) * 5)
+        .offset((pag - 1) * 6)
         .limit(6)
         .orderBy('id', 'desc');
       }
@@ -63,9 +63,9 @@ module.exports = {
     const { title, description, value } = request.body;
 
     const ong_id = request.headers.ong_id;
-  
+
     const [id] = await connection('incidents').insert({ title, description, value, ong_id });
-  
+
     return response.json({ id });
   },
 
@@ -75,7 +75,7 @@ module.exports = {
     const ong_id = request.headers.ong_id;
 
     await connection('incidents').where({ id: id, ong_id: ong_id }).delete();
-    
+
     return response.status(204).send();
   },
 };
